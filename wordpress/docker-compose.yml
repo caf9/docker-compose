@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+
+  app:
+    image: wordpress # arm64v8/wordpress
+    container_name: wordpress.site
+    #hostname: wordpress.site
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: wordpress.site_db
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+      - /etc/wordpress/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    ports:
+      - "80:80"
+
+  db:
+    image: mysql:5.7
+    container_name: wordpress.site_db
+    #hostname: wordpress.db
+    restart: always
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - ./mysql:/var/lib/mysql
